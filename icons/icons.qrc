@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/player">
+        <file>play-button.svg</file>
+        <file>record-video-stop.svg</file>
+        <file>video-pause.svg</file>
+        <file>video-record-play.svg</file>
+    </qresource>
+    <qresource prefix="/other">
+        <file>account.svg</file>
+    </qresource>
+</RCC>
