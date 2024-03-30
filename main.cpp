@@ -3,6 +3,8 @@
 #include <QQmlContext>
 #include <Gstreamer/gstreamervideocapture.h>
 #include <videoitem.h>
+#include <Utils/utils.h>
+#include <StreamControl/VideoControl/videocontrol.h>
 
 int main(int argc, char *argv[])
 {
@@ -10,9 +12,13 @@ int main(int argc, char *argv[])
 
     gst_init(&argc, &argv);
 
-    const char *pipeline = "filesrc location=C:/Users/ugurk/Videos/video.mp4 ! qtdemux ! h264parse ! avdec_h264 ! videoconvert ! video/x-raw,format=RGB ! appsink name=sink";
-
     QQmlApplicationEngine engine;
+
+    qmlRegisterSingletonType<Utils>("Utils", 1, 0, "Utils", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        return Utils::getInstance();
+    });
 
     qmlRegisterType<VideoItem>("VideoItem", 1, 0, "VideoItem");
 
@@ -27,6 +33,9 @@ int main(int argc, char *argv[])
         },
         Qt::QueuedConnection);
     engine.load(url);
+
+    VideoControl videoControl;
+    engine.rootContext()->setContextProperty("videoControl", &videoControl);
 
     return app.exec();
 }

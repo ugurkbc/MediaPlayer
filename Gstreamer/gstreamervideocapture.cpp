@@ -2,8 +2,8 @@
 #include <iostream>
 #include <QImage>
 
-GstreamerVideoCapture::GstreamerVideoCapture(const char* pipelineString, QObject *parent)
-    : pipelineString(pipelineString), pipeline(nullptr), bus(nullptr),
+GstreamerVideoCapture::GstreamerVideoCapture(QObject *parent)
+    : pipeline(nullptr), bus(nullptr),
     appsink(nullptr), width(0), height(0), frameRate(0.0), loop(nullptr),
     format(""), QThread{parent}
 {

@@ -9,7 +9,8 @@ class GstreamerVideoCapture : public QThread
 {
     Q_OBJECT
 public:
-    explicit GstreamerVideoCapture(const char* pipelineString, QObject *parent = nullptr);
+    explicit GstreamerVideoCapture(QObject *parent = nullptr);
+
     ~GstreamerVideoCapture();
 
 public:
