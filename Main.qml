@@ -6,13 +6,15 @@ ApplicationWindow  {
 
     visible: true
     title: qsTr("Hello World")
-    width: 640
-    height: 480
+    width: 1280
+    height: 960
+
+    property string colorName: "black"
 
     Rectangle {
             width: parent.width
             height: parent.height
-            color: "black"
+            color: colorName
 
             RowLayout {
                 anchors.fill: parent
@@ -22,7 +24,7 @@ ApplicationWindow  {
                     Layout.preferredWidth: parent.width * 0.1
                     Layout.maximumWidth: 100
                     Layout.fillHeight: true
-                    color: "black"
+                    color: colorName
 
                     Loader {
                             id: leftPageLoader
@@ -34,8 +36,7 @@ ApplicationWindow  {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    color: "black"
-
+                    color: colorName
 
                     ColumnLayout {
                         anchors.fill: parent
@@ -46,7 +47,7 @@ ApplicationWindow  {
                             Layout.fillHeight: true
                             Layout.preferredHeight: parent.height * 0.1
                             Layout.maximumHeight: 80
-                            color: "black"
+                            color: colorName
 
                             Loader {
                                     id: topPageLoader
@@ -59,7 +60,7 @@ ApplicationWindow  {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             Layout.minimumHeight: parent.height * 0.8
-                            color: "black"
+                            color: colorName
 
 
                             Loader {
@@ -74,7 +75,7 @@ ApplicationWindow  {
                             Layout.fillHeight: true
                             Layout.preferredHeight: parent.height * 0.1
                             Layout.maximumHeight: 80
-                            color: "black"
+                            color: colorName
 
                             Loader {
                                     id: bottomPageLoader
@@ -89,7 +90,7 @@ ApplicationWindow  {
                     Layout.preferredWidth: parent.width * 0.1
                     Layout.maximumWidth: 100
                     Layout.fillHeight: true
-                    color: "black"
+                    color: colorName
 
                     Loader {
                             id: rightPageLoader
