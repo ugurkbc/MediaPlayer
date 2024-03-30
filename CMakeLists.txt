@@ -29,13 +29,15 @@ qt_add_qml_module(appMediaPlayer
     VERSION 1.0
     QML_FILES Main.qml
     SOURCES Gstreamer/gstreamervideocapture.cpp Gstreamer/gstreamervideocapture.h
-    RESOURCES icons/icons.qrc
     QML_FILES Screens/TopScreen/TopStartUpScreen.qml
     QML_FILES Screens/BottomScreen/BottomStartUpScreen.qml
     QML_FILES Screens/LeftScreen/LeftStartUpScreen.qml
     QML_FILES Screens/RightScreen/RightStartUpScreen.qml
     QML_FILES Screens/MainScreen/MainScreen.qml
     SOURCES videoitem.h videoitem.cpp
+    SOURCES Utils/utils.h Utils/utils.cpp
+    SOURCES StreamControl/VideoControl/videocontrol.h StreamControl/VideoControl/videocontrol.cpp
+    QML_FILES CustomQMLComponents/CustomButton.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
