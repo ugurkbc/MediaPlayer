@@ -2,8 +2,7 @@
 #include <QPainter>
 #include <QDebug>
 
-VideoItem::VideoItem(): mLocker(&mMutex) {
-
+QImage CreateCustomImage(){
     int width = 100;
     int height = 100;
 
@@ -12,7 +11,12 @@ VideoItem::VideoItem(): mLocker(&mMutex) {
     QRgb red = qRgb(255, 0, 0);
     image.fill(red);
 
-    mImage = image;
+    return image;
+}
+
+VideoItem::VideoItem(): mLocker(&mMutex) {
+
+    //mImage = CreateCustomImage();
 }
 
 void VideoItem::paint(QPainter *painter)
@@ -29,7 +33,7 @@ void VideoItem::paint(QPainter *painter)
     }
 }
 
-void VideoItem::newImage(QImage pImage)
+void VideoItem::newImage(QImage &pImage)
 {
     mLocker.relock();
 

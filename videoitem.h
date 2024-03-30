@@ -22,7 +22,7 @@ protected:
     void paint(QPainter *painter) override;
 
 public slots:
-    void newImage(QImage pImage);
+    void newImage(QImage &pImage);
 
 signals:
     void onNewFrame(QImage);
