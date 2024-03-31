@@ -16,6 +16,7 @@ public:
 
 public:
     void play(QString str);
+    void play();
     void pause();
     void close();
 private:
@@ -38,6 +39,7 @@ private:
     gint height;
     double frameRate;
     std::string format;
+    bool paused;
 
 signals:
     void newImage(QImage &);

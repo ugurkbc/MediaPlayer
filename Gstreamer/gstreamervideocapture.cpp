@@ -5,7 +5,7 @@
 GstreamerVideoCapture::GstreamerVideoCapture(QObject *parent)
     : pipeline(nullptr), bus(nullptr),
     appsink(nullptr), width(0), height(0), frameRate(0.0), loop(nullptr),
-    format(""), QThread{parent}
+    format(""), paused(false), QThread{parent}
 {
 }
 
@@ -28,12 +28,32 @@ void GstreamerVideoCapture::play(QString str)
     if(!isRunning()){
         start();
     }
+    else{
+        if(paused){
+            gst_element_set_state(pipeline, GST_STATE_PLAYING);
+            paused = false;
+        }
+    }
+}
+
+void GstreamerVideoCapture::play()
+{
+    if(!isRunning()){
+        start();
+    }
+    else{
+        if(paused){
+            gst_element_set_state(pipeline, GST_STATE_PLAYING);
+            paused = false;
+        }
+    }
 }
 
 void GstreamerVideoCapture::pause()
 {
     if(isRunning()){
         gst_element_set_state(pipeline, GST_STATE_PAUSED);
+        paused = true;
     }
 }
 
@@ -41,6 +61,11 @@ void GstreamerVideoCapture::close()
 {
     if(isRunning()){
         gst_element_send_event(pipeline, gst_event_new_eos());
+
+        if(paused){
+            gst_element_set_state(pipeline, GST_STATE_PLAYING);
+            paused = false;
+        }
     }
 }
 
@@ -78,6 +103,8 @@ void GstreamerVideoCapture::clean()
     height = 0;
     frameRate = 0;
     format = "";
+
+    paused = false;
 }
 
 gboolean GstreamerVideoCapture::busCallback(GstBus* bus, GstMessage* message, gpointer data) {
@@ -103,25 +130,25 @@ gboolean GstreamerVideoCapture::busCallback(GstBus* bus, GstMessage* message, gp
         break;
     }
 
-    // case GST_MESSAGE_STATE_CHANGED: {
-    //     // Log state changes
-    //     GstState oldState, newState, pendingState;
+     case GST_MESSAGE_STATE_CHANGED: {
+         // Log state changes
+         GstState oldState, newState, pendingState;
 
-    //     // Parse the state change message to obtain old, new, and pending states
-    //     gst_message_parse_state_changed(message, &oldState, &newState, &pendingState);
+         // Parse the state change message to obtain old, new, and pending states
+         gst_message_parse_state_changed(message, &oldState, &newState, &pendingState);
 
-    //     // Print the details of the state change
-    //     std::cout << "State changed from " << gst_element_state_get_name(oldState);
-    //     std::cout << " to " << gst_element_state_get_name(newState);
+         // Print the details of the state change
+         std::cout << "State changed from " << gst_element_state_get_name(oldState);
+         std::cout << " to " << gst_element_state_get_name(newState);
 
-    //     // Check if there is a pending state (transition in progress)
-    //     if (pendingState != GST_STATE_VOID_PENDING) {
-    //         std::cout << " (pending: " << gst_element_state_get_name(pendingState) << ")";
-    //     }
+         // Check if there is a pending state (transition in progress)
+         if (pendingState != GST_STATE_VOID_PENDING) {
+             std::cout << " (pending: " << gst_element_state_get_name(pendingState) << ")";
+         }
 
-    //     std::cout << std::endl;
-    //     break;
-    // }
+         std::cout << std::endl;
+         break;
+     }
 
 
     default:
