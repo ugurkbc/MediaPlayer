@@ -22,7 +22,7 @@ ColumnLayout{
         Layout.alignment: Qt.AlignHCenter
         buttonText: "Play"
         onClicked: {
-            onClicked: fileDialog.open()
+            onClicked: videoControl.playVideoStream()
         }
     }
 
@@ -30,7 +30,7 @@ ColumnLayout{
         Layout.alignment: Qt.AlignHCenter
         buttonText: "Pause"
         onClicked: {
-            onClicked: fileDialog.open()
+            onClicked: videoControl.pauseVideoStream()
         }
     }
 
@@ -38,7 +38,7 @@ ColumnLayout{
         Layout.alignment: Qt.AlignHCenter
         buttonText: "Close"
         onClicked: {
-            onClicked: fileDialog.open()
+            onClicked: videoControl.closeVideoStream()
         }
     }
 
