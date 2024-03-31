@@ -40,7 +40,7 @@ private:
     std::string format;
 
 signals:
-    void newImage(const QImage &);
+    void newImage(QImage &);
 };
 
 #endif // GSTREAMERVIDEOCAPTURE_H

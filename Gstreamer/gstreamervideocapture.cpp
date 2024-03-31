@@ -18,7 +18,7 @@ GstreamerVideoCapture::~GstreamerVideoCapture()
 }
 
 static void cleanUpGstBuffer(void *imageBuffer){
-    gst_buffer_unref((GstBuffer *) imageBuffer);
+   gst_buffer_unref((GstBuffer *) imageBuffer);
 }
 
 void GstreamerVideoCapture::play()
@@ -110,25 +110,25 @@ gboolean GstreamerVideoCapture::busCallback(GstBus* bus, GstMessage* message, gp
         break;
     }
 
-    case GST_MESSAGE_STATE_CHANGED: {
-        // Log state changes
-        GstState oldState, newState, pendingState;
+    // case GST_MESSAGE_STATE_CHANGED: {
+    //     // Log state changes
+    //     GstState oldState, newState, pendingState;
 
-        // Parse the state change message to obtain old, new, and pending states
-        gst_message_parse_state_changed(message, &oldState, &newState, &pendingState);
+    //     // Parse the state change message to obtain old, new, and pending states
+    //     gst_message_parse_state_changed(message, &oldState, &newState, &pendingState);
 
-        // Print the details of the state change
-        std::cout << "State changed from " << gst_element_state_get_name(oldState);
-        std::cout << " to " << gst_element_state_get_name(newState);
+    //     // Print the details of the state change
+    //     std::cout << "State changed from " << gst_element_state_get_name(oldState);
+    //     std::cout << " to " << gst_element_state_get_name(newState);
 
-        // Check if there is a pending state (transition in progress)
-        if (pendingState != GST_STATE_VOID_PENDING) {
-            std::cout << " (pending: " << gst_element_state_get_name(pendingState) << ")";
-        }
+    //     // Check if there is a pending state (transition in progress)
+    //     if (pendingState != GST_STATE_VOID_PENDING) {
+    //         std::cout << " (pending: " << gst_element_state_get_name(pendingState) << ")";
+    //     }
 
-        std::cout << std::endl;
-        break;
-    }
+    //     std::cout << std::endl;
+    //     break;
+    // }
 
 
     default:
@@ -144,17 +144,27 @@ GstFlowReturn GstreamerVideoCapture::newBufferCallback(GstElement* appsink, gpoi
     GstSample* sample = gst_app_sink_pull_sample(GST_APP_SINK(appsink));
     if (sample) {
         GstBuffer *buffer = gst_sample_get_buffer(sample);
+        if(buffer){
+            GstMapInfo map;
+            if (gst_buffer_map(buffer, &map, GST_MAP_READ)) {
 
-        GstMapInfo map;
-        if (gst_buffer_map(buffer, &map, GST_MAP_READ)) {
+                GstCaps *lCaps = nullptr;
+                lCaps = gst_sample_get_caps((GstSample *)sample);
 
-            std::cout << "frame";
+                GstStructure *lStructure = nullptr;
+                lStructure = gst_caps_get_structure(lCaps, 0);
 
-            QImage image(map.data, capture->width, capture->height, QImage::Format_RGB888, cleanUpGstBuffer, buffer);
+                gst_structure_get_int (lStructure, "width", &capture->width);
+                gst_structure_get_int (lStructure, "height", &capture->height);
 
-            //emit capture->newImage(image);
+                QImage image(map.data, capture->width, capture->height, QImage::Format_RGB888, cleanUpGstBuffer, buffer);
+
+                emit capture->newImage(image);
+
+                gst_buffer_ref(buffer);
+                gst_buffer_unmap(buffer, &map);
+            }
         }
-
         gst_sample_unref(sample);
     }
 
