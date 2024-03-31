@@ -21,16 +21,9 @@ static void cleanUpGstBuffer(void *imageBuffer){
    gst_buffer_unref((GstBuffer *) imageBuffer);
 }
 
-void GstreamerVideoCapture::play()
+void GstreamerVideoCapture::play(QString str)
 {
-    if(!isRunning()){
-        start();
-    }
-}
-
-void GstreamerVideoCapture::play(const char *pipelineString)
-{
-    this->pipelineString = pipelineString;
+    pipelineString = str;
 
     if(!isRunning()){
         start();
@@ -53,7 +46,7 @@ void GstreamerVideoCapture::close()
 
 void GstreamerVideoCapture::init()
 {
-    pipeline = gst_parse_launch(pipelineString, nullptr);
+    pipeline = gst_parse_launch(pipelineString.toStdString().c_str(), nullptr);
     bus = gst_pipeline_get_bus(GST_PIPELINE(pipeline));
     gst_bus_add_signal_watch(bus);
 

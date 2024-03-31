@@ -2,6 +2,7 @@
 #define GSTREAMERVIDEOCAPTURE_H
 
 #include <QThread>
+#include <QString>
 #include <gst/gst.h>
 #include <gst/app/gstappsink.h>
 
@@ -14,8 +15,7 @@ public:
     ~GstreamerVideoCapture();
 
 public:
-    void play();
-    void play(const char* pipelineString);
+    void play(QString str);
     void pause();
     void close();
 private:
@@ -28,7 +28,7 @@ private:
 protected:
     void run() override;
 private:
-    const char* pipelineString;
+    QString pipelineString;
     GstElement* pipeline;
     GstBus* bus;
     GstElement* appsink;
