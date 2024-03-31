@@ -3,7 +3,6 @@
 
 #include <QQuickPaintedItem>
 #include <QImage>
-#include <QMutexLocker>
 #include <QMutex>
 #include <QPainter>
 
@@ -16,7 +15,6 @@ public:
 private:
     QImage mImage;
     QMutex mMutex;
-    QMutexLocker<QMutex> mLocker;
 
 protected:
     void paint(QPainter *painter) override;

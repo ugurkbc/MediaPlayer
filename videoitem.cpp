@@ -14,13 +14,15 @@ QImage CreateCustomImage(){
     return image;
 }
 
-VideoItem::VideoItem(): mLocker(&mMutex) {
+VideoItem::VideoItem() {
 
     //mImage = CreateCustomImage();
 }
 
 void VideoItem::paint(QPainter *painter)
 {
+    mMutex.lock();
+
     QPointF centerPos = QPointF(boundingRect().center().x() - mImage.width() / 2,
                                 boundingRect().center().y() - mImage.height() / 2);
 
@@ -28,16 +30,16 @@ void VideoItem::paint(QPainter *painter)
 
     emit onNewFrame(mImage);
 
-    if(mLocker.isLocked()){
-        mLocker.unlock();
-    }
+    mMutex.unlock();
 }
 
 void VideoItem::newImage(QImage &pImage)
 {
-    mLocker.relock();
+    mMutex.lock();
 
     mImage = pImage;
 
-    update();
+    mMutex.unlock();
+
+    QMetaObject::invokeMethod(this, "update");
 }
