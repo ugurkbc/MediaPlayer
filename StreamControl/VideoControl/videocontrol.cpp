@@ -24,14 +24,17 @@ void VideoControl::setUrl(QString url)
 
 void VideoControl::playVideoStream()
 {
-    //const char *pipeline = "filesrc location=C:/Users/ugurk/Videos/video.mp4 ! qtdemux ! h264parse ! avdec_h264 ! videoconvert ! video/x-raw,format=RGB ! appsink name=sink";
-
-    if (QFile::exists(url)) {
-        QString str = QString("filesrc location=%1 ! qtdemux ! h264parse ! avdec_h264 ! videoconvert ! video/x-raw,format=RGB ! appsink name=sink").arg(url);
-        videoCapture.play(str);
-     } else {
-         qDebug() << "Error: File does not exist or URL is invalid!";
-     }
+    if(videoCapture.isRunning()){
+        videoCapture.play();
+    }
+    else{
+        if (QFile::exists(url)) {
+            QString str = QString("filesrc location=%1 ! qtdemux ! h264parse ! avdec_h264 ! videoconvert ! video/x-raw,format=RGB ! appsink name=sink").arg(url);
+            videoCapture.play(str);
+        } else {
+            qDebug() << "Error: File does not exist or URL is invalid!";
+        }
+    }
 }
 
 void VideoControl::pauseVideoStream()
