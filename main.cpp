@@ -14,6 +14,9 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
+    VideoControl videoControl;
+    engine.rootContext()->setContextProperty("videoControl", &videoControl);
+
     qmlRegisterSingletonType<Utils>("Utils", 1, 0, "Utils", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
         Q_UNUSED(engine)
         Q_UNUSED(scriptEngine)
@@ -27,15 +30,18 @@ int main(int argc, char *argv[])
         &engine,
         &QQmlApplicationEngine::objectCreated,
         &app,
-        [url](QObject *obj, const QUrl &objUrl) {
+        [url, &videoControl](QObject *obj, const QUrl &objUrl) {
             if (!obj && url == objUrl)
                 QCoreApplication::exit(-1);
+
+            VideoItem *videoItem = obj->findChild<VideoItem *>("videoItem");
+
+            if (videoItem) {
+                videoControl.setVideoItem(videoItem);
+            }
         },
         Qt::QueuedConnection);
     engine.load(url);
-
-    VideoControl videoControl;
-    engine.rootContext()->setContextProperty("videoControl", &videoControl);
 
     return app.exec();
 }

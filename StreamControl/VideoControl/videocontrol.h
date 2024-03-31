@@ -11,7 +11,7 @@ class VideoControl : public QObject
     Q_OBJECT
 public:
     explicit VideoControl(QObject *parent = nullptr);
-
+    void setVideoItem(VideoItem *pVideoItem);
     Q_INVOKABLE void setUrl(QString url);
     Q_INVOKABLE void playVideoStream();
     Q_INVOKABLE void pauseVideoStream();
