@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include <QString>
+#include <QElapsedTimer>
 #include <gst/gst.h>
 #include <gst/app/gstappsink.h>
 
@@ -11,9 +12,7 @@ class GstreamerVideoCapture : public QThread
     Q_OBJECT
 public:
     explicit GstreamerVideoCapture(QObject *parent = nullptr);
-
     ~GstreamerVideoCapture();
-
 public:
     void play(QString str);
     void play();
@@ -30,6 +29,7 @@ protected:
     void run() override;
 private:
     QString pipelineString;
+    QElapsedTimer elapsedTimer;
     GstElement* pipeline;
     GstBus* bus;
     GstElement* appsink;
@@ -38,8 +38,11 @@ private:
     gint width;
     gint height;
     double frameRate;
-    std::string format;
+    int fpsNum = 0;
+    int fpsDen = 1;
     bool paused;
+    int frameCount;
+    int frameIntervalMs;
 
 signals:
     void newImage(QImage &);
