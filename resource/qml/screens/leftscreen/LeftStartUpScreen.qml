@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts
 import QtQuick.Dialogs
 import Utils 1.0
-import "../../CustomQMLComponents"
+import "../../customqmlcomponents"
 
 ColumnLayout{
     anchors.fill: parent

@@ -1,7 +1,7 @@
-#include "videocontrol.h"
+#include "streamcontrol/videocontrol/videocontrol.h"
 #include <QFile>
 #include <QDebug>
-#include <videoitem.h>
+#include "qml/videoitem.h"
 
 VideoControl::VideoControl(QObject *parent)
     : QObject{parent}

@@ -1,10 +1,10 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <Gstreamer/gstreamervideocapture.h>
-#include <videoitem.h>
-#include <Utils/utils.h>
-#include <StreamControl/VideoControl/videocontrol.h>
+#include <gstreamer/gstreamervideocapture.h>
+#include <qml/videoitem.h>
+#include <utils.h>
+#include <streamcontrol/videocontrol/videocontrol.h>
 
 int main(int argc, char *argv[])
 {
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<VideoItem>("VideoItem", 1, 0, "VideoItem");
 
-    const QUrl url(u"qrc:/MediaPlayer/Main.qml"_qs);
+    const QUrl url(QStringLiteral("qrc:/qml/Main.qml"));
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreated,

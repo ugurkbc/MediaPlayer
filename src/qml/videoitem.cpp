@@ -1,4 +1,4 @@
-#include "videoitem.h"
+#include "qml/videoitem.h"
 #include <QPainter>
 #include <QDebug>
 

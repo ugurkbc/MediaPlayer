@@ -29,7 +29,7 @@ ApplicationWindow  {
                     Loader {
                             id: leftPageLoader
                             anchors.fill: parent
-                            source: "Screens/LeftScreen/LeftStartUpScreen.qml"
+                            source: "screens/leftscreen/LeftStartUpScreen.qml"
                         }
                 }
 
@@ -52,7 +52,7 @@ ApplicationWindow  {
                             Loader {
                                     id: topPageLoader
                                     anchors.fill: parent
-                                    source: "Screens/TopScreen/TopStartUpScreen.qml"
+                                    source: "screens/topscreen/TopStartUpScreen.qml"
                                 }
                         }
 
@@ -66,7 +66,7 @@ ApplicationWindow  {
                             Loader {
                                     id: mainPageLoader
                                     anchors.fill: parent
-                                    source: "Screens/MainScreen/MainScreen.qml"
+                                    source: "screens/mainscreen/MainScreen.qml"
                                 }
                         }
 
@@ -80,7 +80,7 @@ ApplicationWindow  {
                             Loader {
                                     id: bottomPageLoader
                                     anchors.fill: parent
-                                    source: "Screens/BottomScreen/BottomStartUpScreen.qml"
+                                    source: "screens/bottomscreen/BottomStartUpScreen.qml"
                                 }
                         }
                     }
@@ -95,7 +95,7 @@ ApplicationWindow  {
                     Loader {
                             id: rightPageLoader
                             anchors.fill: parent
-                            source: "Screens/RightScreen/RightStartUpScreen.qml"
+                            source: "screens/rightscreen/RightStartUpScreen.qml"
                         }
                 }
             }

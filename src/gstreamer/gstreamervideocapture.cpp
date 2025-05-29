@@ -1,4 +1,4 @@
-#include "gstreamervideocapture.h"
+#include "gstreamer/gstreamervideocapture.h"
 #include <iostream>
 #include <QImage>
 

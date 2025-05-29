@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/Main.qml</file>
+        <file>qml/customqmlcomponents/CustomButton.qml</file>
+        <file>qml/screens/bottomscreen/BottomStartUpScreen.qml</file>
+        <file>qml/screens/leftscreen/LeftStartUpScreen.qml</file>
+        <file>qml/screens/mainscreen/MainScreen.qml</file>
+        <file>qml/screens/rightscreen/RightStartUpScreen.qml</file>
+        <file>qml/screens/topscreen/TopStartUpScreen.qml</file>
+    </qresource>
+</RCC>
