@@ -3,9 +3,8 @@ import QtQuick.Layouts
 import QtQuick.Controls.Windows
 
 ApplicationWindow  {
-
     visible: true
-    title: qsTr("Hello World")
+    title: qsTr("Uğur KABACAOĞLU")
     width: 1280
     height: 960
 
