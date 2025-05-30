@@ -23,8 +23,6 @@ private:
     void clean();
     static gboolean busCallback(GstBus* bus, GstMessage* message, gpointer data);
     static GstFlowReturn newBufferCallback(GstElement* appsink, gpointer data);
-    static void padAddedCallback(GstElement* appsink, GstPad* pad, gpointer data);
-
 protected:
     void run() override;
 private:
