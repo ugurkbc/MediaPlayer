@@ -27,6 +27,7 @@ set(GSTREAMER_LIBS
     gstbase-1.0
     gobject-2.0
     glib-2.0
+    gstpbutils-1.0
 )
 
 file(GLOB_RECURSE CPP_SOURCES src/*.cpp)
