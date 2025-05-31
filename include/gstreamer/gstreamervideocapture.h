@@ -6,6 +6,7 @@
 #include <QElapsedTimer>
 #include <gst/gst.h>
 #include <gst/app/gstappsink.h>
+#include "streamcontrol/videocontrol/util/util.h"
 
 class GstreamerVideoCapture : public QThread
 {
@@ -21,26 +22,31 @@ public:
 private:
     void init();
     void clean();
+    bool getVideoFeaturesFromFileLocation(const QString &fileLocation);
     static gboolean busCallback(GstBus* bus, GstMessage* message, gpointer data);
-    static GstFlowReturn newBufferCallback(GstElement* appsink, gpointer data);
+    static GstFlowReturn newBufferCallbackFileSource(GstElement* appsink, gpointer data);
+    static GstFlowReturn newBufferCallbackRealTime(GstElement* appsink, gpointer data);
+    static QString extractFilePathFromPipeline(const QString &pipeline);
 protected:
     void run() override;
 private:
     QString pipelineString;
-    QElapsedTimer elapsedTimer;
-    GstElement* pipeline;
-    GstBus* bus;
-    GstElement* appsink;
-    GMainLoop* loop;
+    GstElement* pipeline = nullptr;
+    GstBus* bus = nullptr;
+    GstElement* appsink = nullptr;
+    GMainLoop* loop = nullptr;
 
-    gint width;
-    gint height;
-    double frameRate;
-    int fpsNum = 0;
-    int fpsDen = 1;
-    bool paused;
-    int frameCount;
-    int frameIntervalMs;
+    using CallbackFunc = GstFlowReturn (*)(GstElement*, gpointer);
+
+    CallbackFunc bufferCallbacks[static_cast<unsigned int>(VideoSource::SIZE)] = {0};
+    gint width = 0;
+    gint height = 0;
+    bool paused = 0;
+    int frameCount = 0;
+    qint64 frameIntervalMs = 0;
+    float frameRate = 0;
+    int delayValue = 0;
+    QElapsedTimer elapsedTimer;
 
 signals:
     void newImage(QImage &);
