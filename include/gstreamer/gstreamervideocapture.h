@@ -3,7 +3,6 @@
 
 #include <QThread>
 #include <QString>
-#include <QElapsedTimer>
 #include <gst/gst.h>
 #include <gst/app/gstappsink.h>
 #include "streamcontrol/videocontrol/util/util.h"
@@ -42,11 +41,7 @@ private:
     gint width = 0;
     gint height = 0;
     bool paused = 0;
-    int frameCount = 0;
-    qint64 frameIntervalMs = 0;
     float frameRate = 0;
-    int delayValue = 0;
-    QElapsedTimer elapsedTimer;
 
 signals:
     void newImage(QImage &);

@@ -87,9 +87,6 @@ void GstreamerVideoCapture::init()
         if(!getVideoFeaturesFromFileLocation(lLocationFile)){
             return;
         }
-
-        frameIntervalMs = static_cast<qint64>(1000.0 / frameRate);
-        delayValue = frameIntervalMs / 2;
     }
 
     pipeline = gst_parse_launch(pipelineString.toStdString().c_str(), nullptr);
@@ -97,7 +94,13 @@ void GstreamerVideoCapture::init()
     gst_bus_add_signal_watch(bus);
 
     appsink = gst_bin_get_by_name(GST_BIN(pipeline), "sink");
-    g_object_set(appsink, "emit-signals", TRUE, "sync", FALSE, nullptr);
+    g_object_set(appsink,
+             "emit-signals", TRUE,
+             "sync", TRUE,                 // ✅ let the pipeline clock pace samples
+             "max-buffers", 2,             // small queue; prevents latency buildup
+             "drop", TRUE,                 // drop if the UI can’t keep up
+             "enable-last-sample", FALSE,  // don’t keep a cached sample
+             nullptr);
 
     g_signal_connect(bus, "message", G_CALLBACK(busCallback), this);
     g_signal_connect(appsink, "new-sample", G_CALLBACK(bufferCallbacks[index]), this);
@@ -118,10 +121,7 @@ void GstreamerVideoCapture::clean()
 
     width = 0;
     height = 0;
-    frameIntervalMs = 0;
-    frameCount = 0;
     frameRate = 0;
-    delayValue = 0;
     paused = 0;
 }
 
@@ -211,24 +211,9 @@ GstFlowReturn GstreamerVideoCapture::newBufferCallbackFileSource(GstElement* app
             GstMapInfo map;
             if (gst_buffer_map(buffer, &map, GST_MAP_READ)) {
 
-                QImage image(map.data, capture->width, capture->height, QImage::Format_RGB888, cleanUpGstBuffer, buffer);
-
-                if(capture->elapsedTimer.elapsed() >= capture->frameIntervalMs){
-                    capture->delayValue--;
-                }
-                else{
-                    capture->delayValue++;
-                }
-
-                if (capture->frameCount++ % 30 == 0){
-                    qDebug() << "delayValue:" << capture->delayValue;
-                }
+                QImage image(map.data, capture->width, capture->height, QImage::Format_ARGB32_Premultiplied, cleanUpGstBuffer, buffer);
 
                 emit capture->newImage(image);
-
-                capture->frameCount++;
-                capture->elapsedTimer.restart();
-                QThread::msleep(capture->delayValue);
 
                 gst_buffer_ref(buffer);
                 gst_buffer_unmap(buffer, &map);
@@ -259,7 +244,7 @@ GstFlowReturn GstreamerVideoCapture::newBufferCallbackRealTime(GstElement* appsi
                 gst_structure_get_int (lStructure, "width", &capture->width);
                 gst_structure_get_int (lStructure, "height", &capture->height);
 
-                QImage image(map.data, capture->width, capture->height, QImage::Format_RGB888, cleanUpGstBuffer, buffer);
+                QImage image(map.data, capture->width, capture->height, QImage::Format_ARGB32_Premultiplied, cleanUpGstBuffer, buffer);
 
                 emit capture->newImage(image);
 
@@ -288,13 +273,12 @@ void GstreamerVideoCapture::run()
 
     GstStateChangeReturn ret = gst_element_set_state(pipeline, GST_STATE_PLAYING);
     loop = g_main_loop_new(nullptr, FALSE);
-    elapsedTimer.start();
 
     if(ret != GST_STATE_CHANGE_FAILURE){
         g_main_loop_run(loop);
     }
 
-    QImage lImage(width, height, QImage::Format_RGB888);
+    QImage lImage(width, height, QImage::Format_ARGB32_Premultiplied);
     lImage.fill(Qt::black);
     emit newImage(lImage);
 

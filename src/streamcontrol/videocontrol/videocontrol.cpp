@@ -29,7 +29,7 @@ void VideoControl::playVideoStream()
     }
     else{
         if (QFile::exists(url)) {
-            QString str = QString("filesrc location=%1 ! qtdemux ! h264parse ! avdec_h264 ! videoconvert ! video/x-raw,format=RGB ! appsink name=sink").arg(url);
+            QString str = QString("filesrc location=%1 ! qtdemux ! h264parse ! avdec_h264 ! videoconvert ! video/x-raw,format=BGRA ! appsink name=sink").arg(url);
             videoCapture.play(str);
         } else {
             qDebug() << "Error: File does not exist or URL is invalid!";
