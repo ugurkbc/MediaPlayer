@@ -179,7 +179,7 @@ gboolean GstreamerVideoCapture::busCallback(GstBus* bus, GstMessage* message, gp
 
          // Parse the state change message to obtain old, new, and pending states
          gst_message_parse_state_changed(message, &oldState, &newState, &pendingState);
-
+/*
          // Print the details of the state change
          qDebug() << "State changed from " << gst_element_state_get_name(oldState)
          << " to " << gst_element_state_get_name(newState);
@@ -190,6 +190,7 @@ gboolean GstreamerVideoCapture::busCallback(GstBus* bus, GstMessage* message, gp
          }
 
          qDebug() << "\n";
+         */
          break;
      }
 
