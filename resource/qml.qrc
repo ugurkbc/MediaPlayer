@@ -7,5 +7,18 @@
         <file>qml/screens/mainscreen/MainScreen.qml</file>
         <file>qml/screens/rightscreen/RightStartUpScreen.qml</file>
         <file>qml/screens/topscreen/TopStartUpScreen.qml</file>
+
+
+        <!-- Icons -->
+        <file>icons/account.svg</file>
+        <file>icons/play-button.svg</file>
+        <file>icons/record-video-stop.svg</file>
+        <file>icons/video-pause.svg</file>
+        <file>icons/video-record-play.svg</file>
+        <file>icons/video-close.svg</file>
+        <file>icons/file-dialog.svg</file>
+        <file>icons/close.svg</file>
+        <file>icons/minimize.svg</file>
+        <file>icons/video-records.svg</file>
     </qresource>
 </RCC>
