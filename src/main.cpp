@@ -2,7 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <gstreamer/gstreamervideocapture.h>
-#include <qml/videoitem.h>
+#include <ui/videoitem.h>
 #include <utils.h>
 #include <streamcontrol/videocontrol/videocontrol.h>
 
@@ -26,11 +26,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<VideoItem>("VideoItem", 1, 0, "VideoItem");
 
     const QUrl url(QStringLiteral("qrc:/qml/Main.qml"));
-    QObject::connect(
-        &engine,
-        &QQmlApplicationEngine::objectCreated,
-        &app,
-        [url, &videoControl](QObject *obj, const QUrl &objUrl) {
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app, [url, &videoControl](QObject *obj, const QUrl &objUrl) {
             if (!obj && url == objUrl)
                 QCoreApplication::exit(-1);
 
@@ -39,8 +35,7 @@ int main(int argc, char *argv[])
             if (videoItem) {
                 videoControl.setVideoItem(videoItem);
             }
-        },
-        Qt::QueuedConnection);
+        }, Qt::QueuedConnection);
     engine.load(url);
 
     return app.exec();
