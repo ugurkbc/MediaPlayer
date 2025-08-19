@@ -16,7 +16,6 @@ Rectangle{
         Item { Layout.fillHeight: true }
 
         CustomButton{
-            Layout.topMargin : 20
             Layout.alignment: Qt.AlignHCenter
             iconSource: "qrc:/icons/file-dialog.svg"
             buttonText: "Open Video"

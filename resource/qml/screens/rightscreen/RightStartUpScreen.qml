@@ -17,7 +17,6 @@ Rectangle{
         Item { Layout.fillHeight: true }
 
         CustomButton{
-            Layout.topMargin : 20
             Layout.alignment: Qt.AlignHCenter
             iconSource: "qrc:/icons/setting.svg"
             buttonText: "Setting"
