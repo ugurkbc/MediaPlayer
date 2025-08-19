@@ -19,6 +19,15 @@ Rectangle{
         CustomButton{
             Layout.topMargin : 20
             Layout.alignment: Qt.AlignHCenter
+            iconSource: "qrc:/icons/setting.svg"
+            buttonText: "Setting"
+            reverse: true
+        }
+
+        Item { Layout.fillHeight: true }
+
+        CustomButton{
+            Layout.alignment: Qt.AlignHCenter
             iconSource: "qrc:/icons/video-record-play.svg"
             buttonText: "Record Video"
             reverse: true

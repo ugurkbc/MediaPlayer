@@ -20,5 +20,6 @@
         <file>icons/close.svg</file>
         <file>icons/minimize.svg</file>
         <file>icons/video-records.svg</file>
+        <file>icons/setting.svg</file>
     </qresource>
 </RCC>
