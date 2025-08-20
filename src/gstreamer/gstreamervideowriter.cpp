@@ -11,7 +11,6 @@ const QString GstreamerVideoWriter::APPSRC_NAME = "mysrc";
 
 static void paintTestPattern(QImage &img, int frameIndex)
 {
-    // img should be ARGB32_Premultiplied or RGB32 and already sized to mWidth x mHeight
     QPainter p(&img);
     p.setRenderHint(QPainter::Antialiasing, true);
 
@@ -202,11 +201,7 @@ void GstreamerVideoWriter::recording()
 
     if(mImage.isNull()) return;
 
-    GstClockTime lDuration, lTimeStamp;
     int lSize = mImage.sizeInBytes();
-
-    lDuration = ((double) 1 / mFrameRate) * GST_SECOND;
-    lTimeStamp = mNumFrames * lDuration;
 
     GstBuffer *lBuffer = gst_buffer_new_allocate(nullptr, lSize, nullptr);
     GstMapInfo lInfo;
@@ -214,12 +209,6 @@ void GstreamerVideoWriter::recording()
     memcpy(lInfo.data, (guint8*)mImage.bits(), lSize);
     gst_buffer_unmap(lBuffer, &lInfo);
 
-    /*
-    GST_BUFFER_DURATION(lBuffer) = lDuration;
-    GST_BUFFER_PTS(lBuffer) = lTimeStamp;
-    GST_BUFFER_DTS(lBuffer) = lTimeStamp;
-    GST_BUFFER_OFFSET(lBuffer) = mNumFrames;
-*/
     if (gst_app_src_push_buffer(mAppSrc, lBuffer) == GST_FLOW_OK)
     {
         ++mNumFrames;

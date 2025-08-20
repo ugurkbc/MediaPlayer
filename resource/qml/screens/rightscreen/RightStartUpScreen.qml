@@ -28,7 +28,7 @@ Rectangle{
         CustomButton{
             Layout.alignment: Qt.AlignHCenter
             iconSource: "qrc:/icons/video-record-play.svg"
-            buttonText: "Record Video"
+            buttonText: "Record"
             reverse: true
             onClicked: {
                 onClicked: videoControl.startRecord()
@@ -39,8 +39,8 @@ Rectangle{
 
         CustomButton{
             Layout.alignment: Qt.AlignHCenter
-            iconSource: "qrc:/icons/video-record-play.svg"
-            buttonText: "Stop Record Video"
+            iconSource: "qrc:/icons/video-record-close.svg"
+            buttonText: "Close Record"
             reverse: true
             onClicked: {
                 onClicked: videoControl.closeRecord()
@@ -52,7 +52,7 @@ Rectangle{
         CustomButton{
             Layout.alignment: Qt.AlignHCenter
             iconSource: "qrc:/icons/video-records.svg"
-            buttonText: "Video Records"
+            buttonText: "Records"
             reverse: true
         }
 
