@@ -155,6 +155,7 @@ void GstreamerVideoWriter::init()
                  "format", GST_FORMAT_TIME,
                  "is-live", TRUE,          // good for real-time push
                  "block", TRUE,            // block when downstream is slow
+                 "do-timestamp", TRUE,
                  NULL);
     gst_app_src_set_max_bytes(mAppSrc, static_cast<guint64>(mWidth) * mHeight * 4 * 4);
 
@@ -213,11 +214,12 @@ void GstreamerVideoWriter::recording()
     memcpy(lInfo.data, (guint8*)mImage.bits(), lSize);
     gst_buffer_unmap(lBuffer, &lInfo);
 
+    /*
     GST_BUFFER_DURATION(lBuffer) = lDuration;
     GST_BUFFER_PTS(lBuffer) = lTimeStamp;
     GST_BUFFER_DTS(lBuffer) = lTimeStamp;
     GST_BUFFER_OFFSET(lBuffer) = mNumFrames;
-
+*/
     if (gst_app_src_push_buffer(mAppSrc, lBuffer) == GST_FLOW_OK)
     {
         ++mNumFrames;
