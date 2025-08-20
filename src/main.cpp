@@ -1,6 +1,5 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QQmlContext>
 #include <ui/videoitem.h>
 #include <utils.h>
 #include <streamcontrol/videocontrol/videocontrol.h>
@@ -13,27 +12,18 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    VideoControl videoControl;
-    engine.rootContext()->setContextProperty("videoControl", &videoControl);
-
     qmlRegisterSingletonType<Utils>("Utils", 1, 0, "Utils", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
         Q_UNUSED(engine)
         Q_UNUSED(scriptEngine)
-        return Utils::getInstance();
-    });
+        return Utils::getInstance();});
 
-    qmlRegisterType<VideoItem>("VideoItem", 1, 0, "VideoItem");
+    qmlRegisterType<VideoItem>("App", 1, 0, "VideoItem");
+    qmlRegisterType<VideoControl>("App", 1, 0, "VideoControl");
 
     const QUrl url(QStringLiteral("qrc:/qml/Main.qml"));
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app, [url, &videoControl](QObject *obj, const QUrl &objUrl) {
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app, [url](QObject *obj, const QUrl &objUrl) {
             if (!obj && url == objUrl)
                 QCoreApplication::exit(-1);
-
-            VideoItem *videoItem = obj->findChild<VideoItem *>("videoItem");
-
-            if (videoItem) {
-                videoControl.setVideoItem(videoItem);
-            }
         }, Qt::QueuedConnection);
     engine.load(url);
 

@@ -1,10 +1,14 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import VideoItem 1.0
+import QtQuick
+import App 1.0
 
-
-VideoItem {
-    objectName: "videoItem"
+Item {
     anchors.fill: parent
-}
+    required property VideoControl videoControl
 
+    VideoItem {
+        id: videoItem
+        anchors.fill: parent
+    }
+
+    Component.onCompleted: videoControl.videoItem = videoItem
+}

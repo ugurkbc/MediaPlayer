@@ -1,6 +1,12 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls.Windows
+import App 1.0
+import "screens/leftscreen"
+import "screens/rightscreen"
+import "screens/topscreen"
+import "screens/bottomscreen"
+import "screens/mainscreen"
 
 ApplicationWindow  {
     visible: true
@@ -9,6 +15,7 @@ ApplicationWindow  {
     visibility: Window.Maximized
 
     property string colorName: "black"
+    VideoControl { id: vc }
 
     Rectangle {
         width: parent.width
@@ -28,7 +35,7 @@ ApplicationWindow  {
                 Loader {
                     id: leftPageLoader
                     anchors.fill: parent
-                    source: "screens/leftscreen/LeftStartUpScreen.qml"
+                    sourceComponent: LeftStartUpScreen { videoControl: vc }
                 }
             }
 
@@ -52,7 +59,7 @@ ApplicationWindow  {
                         Loader {
                             id: topPageLoader
                             anchors.fill: parent
-                            source: "screens/topscreen/TopStartUpScreen.qml"
+                            sourceComponent: TopStartUpScreen
                         }
                     }
 
@@ -66,7 +73,7 @@ ApplicationWindow  {
                         Loader {
                             id: mainPageLoader
                             anchors.fill: parent
-                            source: "screens/mainscreen/MainScreen.qml"
+                            sourceComponent: MainScreen { videoControl: vc }
                         }
                     }
 
@@ -81,7 +88,7 @@ ApplicationWindow  {
                         Loader {
                             id: bottomPageLoader
                             anchors.fill: parent
-                            source: "screens/bottomscreen/BottomStartUpScreen.qml"
+                            sourceComponent: BottomStartUpScreen
                         }
                     }
                 }
@@ -96,7 +103,7 @@ ApplicationWindow  {
                 Loader {
                     id: rightPageLoader
                     anchors.fill: parent
-                    source: "screens/rightscreen/RightStartUpScreen.qml"
+                    sourceComponent: RightStartUpScreen { videoControl: vc }
                 }
             }
         }
