@@ -1,7 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <gstreamer/gstreamervideocapture.h>
 #include <ui/videoitem.h>
 #include <utils.h>
 #include <streamcontrol/videocontrol/videocontrol.h>

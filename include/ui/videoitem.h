@@ -20,7 +20,7 @@ public slots:
     void newImage(const QImage &pImage);
 
 signals:
-    void onNewFrame(const QImage &pImage);
+    void onNewFrame(QImage pImage);
     void keepAspectChanged();
 
 protected:

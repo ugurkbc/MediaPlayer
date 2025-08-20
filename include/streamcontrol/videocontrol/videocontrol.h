@@ -2,7 +2,8 @@
 #define VIDEOCONTROL_H
 
 #include <QObject>
-#include <Gstreamer/gstreamervideocapture.h>
+#include <gstreamer/gstreamervideocapture.h>
+#include <gstreamer/gstreamervideowriter.h>
 
 class VideoItem;
 
@@ -16,10 +17,13 @@ public:
     Q_INVOKABLE void playVideoStream();
     Q_INVOKABLE void pauseVideoStream();
     Q_INVOKABLE void closeVideoStream();
+    Q_INVOKABLE void startRecord();
+    Q_INVOKABLE void closeRecord();
 private:
-    GstreamerVideoCapture videoCapture;
-    VideoItem *videoItem;
-    QString url = "";
+    GstreamerVideoCapture mVideoCapture;
+    GstreamerVideoWriter mVideoWriter;
+    VideoItem *mVideoItem;
+    QString mURL = "";
 signals:
 };
 

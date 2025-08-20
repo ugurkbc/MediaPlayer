@@ -10,7 +10,6 @@
 #include <gst/gstbuffer.h>
 #include <gst/app/gstappsrc.h>
 
-
 class GstreamerVideoWriter : public QThread
 {
     Q_OBJECT
@@ -19,7 +18,7 @@ public:
     ~GstreamerVideoWriter();
 public slots:
     void pushImage(QImage pImage);
-    void play(QString pFileName, int pWidth, int pHeight, float pFPS);
+    void record(QString pFileName, int pWidth, int pHeight, float pFPS);
     void close();
 private:
     void init();
@@ -32,7 +31,7 @@ private:
     QImage mImage;
     QString mPipelineString = "";
     QString mFileName = "";
-    QString mFormat = "BGRA";
+    QString mFormat = "RGB";
     QTimer mRecordTimer;
     GstElement *mPipeline = nullptr;
     GstAppSrc  *mAppSrc = nullptr;

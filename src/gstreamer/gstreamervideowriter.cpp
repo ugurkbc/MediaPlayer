@@ -2,10 +2,60 @@
 #include <QStandardPaths>
 #include <QDateTime>
 #include <QDir>
+#include <QPainter>
+#include <QtMath>
 
 const QString GstreamerVideoWriter::PATH = "./records/";
 const QString GstreamerVideoWriter::MEDIA_TYPE = ".mp4";
 const QString GstreamerVideoWriter::APPSRC_NAME = "mysrc";
+
+static void paintTestPattern(QImage &img, int frameIndex)
+{
+    // img should be ARGB32_Premultiplied or RGB32 and already sized to mWidth x mHeight
+    QPainter p(&img);
+    p.setRenderHint(QPainter::Antialiasing, true);
+
+    // Background gradient
+    QLinearGradient g(0, 0, img.width(), img.height());
+    g.setColorAt(0.0, QColor(20, 20, 40));
+    g.setColorAt(1.0, QColor(40, 20, 20));
+    p.fillRect(img.rect(), g);
+
+    // Border
+    p.setPen(QPen(Qt::yellow, 3));
+    p.drawRect(img.rect().adjusted(1,1,-2,-2));
+
+    // Crosshair
+    p.setPen(QPen(Qt::green, 1));
+    p.drawLine(img.width()/2, 0, img.width()/2, img.height());
+    p.setPen(QPen(Qt::red, 1));
+    p.drawLine(0, img.height()/2, img.width(), img.height()/2);
+
+    // Moving square
+    int r = 50;
+    int x = (frameIndex * 5) % qMax(1, img.width() - r);
+    int y = (frameIndex * 3) % qMax(1, img.height() - r);
+    p.setBrush(QColor(0, 150, 255, 200));
+    p.setPen(QPen(Qt::white, 2));
+    p.drawRect(x, y, r, r);
+
+    // Moving circle
+    int cx = img.width()/2  + int(qCos(frameIndex * 0.1) * img.width()/4.0);
+    int cy = img.height()/2 + int(qSin(frameIndex * 0.1) * img.height()/4.0);
+    p.setBrush(QColor(255, 120, 0, 200));
+    p.setPen(QPen(Qt::white, 2));
+    p.drawEllipse(QPoint(cx, cy), 30, 30);
+
+    // Text overlay
+    p.setPen(Qt::white);
+    QFont f = p.font();
+    f.setPointSize(qMax(10, img.width()/32));
+    p.setFont(f);
+    p.drawText(QRect(8, 8, img.width()-16, 40),
+               Qt::AlignLeft | Qt::AlignVCenter,
+               QString("%1x%2  frame %3")
+                   .arg(img.width()).arg(img.height()).arg(frameIndex));
+}
 
 GstreamerVideoWriter::GstreamerVideoWriter(QObject *parent): QThread(parent), mRecordTimer(this)
 {
@@ -39,21 +89,22 @@ QString GstreamerVideoWriter::generateFileName()
 
 QString GstreamerVideoWriter::createPipeline()
 {
-    int fpsNum   = static_cast<int>(mFrameRate * 1001 + 0.5);
-    int fpsDenom = 1001;
-
+    int fpsNum   = mFrameRate;
+    int fpsDenom = 1;
 
     return QString("appsrc name=" + APPSRC_NAME + " ! video/x-raw, format=(string)" + mFormat + ", width=(int)"
                    + QString::number(mWidth)+ ", height=(int)" + QString::number(mHeight) + ", framerate=(fraction)" + QString::number(fpsNum) + "/"
-                   + QString::number(fpsDenom) + " ! videoconvert ! x264enc ! h264parse ! mp4mux ! filesink location=" + mFileName);
+                   + QString::number(fpsDenom) + " ! videoconvert ! video/x-raw, format=(string)I420 ! x264enc ! h264parse ! mp4mux ! filesink location=" + mFileName);
 }
 
 void GstreamerVideoWriter::pushImage(QImage pImage)
 {
-    mImage = pImage;
+    mImage = pImage.scaled(mWidth, mHeight, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+    //paintTestPattern(mImage, mNumFrames);
 }
 
-void GstreamerVideoWriter::play(QString pFileName, int pWidth, int pHeight, float pFPS)
+void GstreamerVideoWriter::record(QString pFileName, int pWidth, int pHeight, float pFPS)
 {
     if(mRecordTimer.isActive()) return;
 
@@ -64,11 +115,12 @@ void GstreamerVideoWriter::play(QString pFileName, int pWidth, int pHeight, floa
     mFileName = generateFileName();
     mPipelineString = createPipeline();
 
-    int intervalMs = static_cast<int>(1000.0 / mFrameRate + 0.5);
+    int intervalMs = static_cast<int>(1000.0 / mFrameRate);
     mRecordTimer.setInterval(intervalMs);
 
-    mImage = QImage(mWidth, mHeight, QImage::Format_ARGB32_Premultiplied);
+    mImage = QImage(mWidth, mHeight, QImage::QImage::Format_RGB888);
     mImage.fill(Qt::black);
+    //paintTestPattern(mImage, 0);
 
     init();
 }
@@ -113,18 +165,23 @@ void GstreamerVideoWriter::init()
         return;
     }
 
-    // Start timer
     mRecordTimer.start();
 }
 
 void GstreamerVideoWriter::clean()
 {
-    if(gst_app_src_end_of_stream((GstAppSrc *)mAppSrc) != GST_FLOW_OK)
-    {
-         qDebug() << "Cannot send EOS to GStreamer pipeline";
-    }
-
     mRecordTimer.stop();
+
+    if (mAppSrc){
+        if(gst_app_src_end_of_stream(mAppSrc) != GST_FLOW_OK){
+            qDebug() << "Cannot send EOS to GStreamer pipeline";
+        }
+
+        GstBus* bus = gst_element_get_bus(mPipeline);
+        GstMessage* msg = gst_bus_timed_pop_filtered(bus, 5 * GST_SECOND, (GstMessageType)(GST_MESSAGE_EOS | GST_MESSAGE_ERROR));
+        if (msg) gst_message_unref(msg);
+        gst_object_unref(bus);
+    }
 
     if (mPipeline) {
         gst_element_set_state(mPipeline, GST_STATE_NULL);
@@ -152,7 +209,7 @@ void GstreamerVideoWriter::recording()
 
     GstBuffer *lBuffer = gst_buffer_new_allocate(nullptr, lSize, nullptr);
     GstMapInfo lInfo;
-    gst_buffer_map(lBuffer, &lInfo, (GstMapFlags)GST_MAP_READ);
+    gst_buffer_map(lBuffer, &lInfo, (GstMapFlags)GST_MAP_WRITE);
     memcpy(lInfo.data, (guint8*)mImage.bits(), lSize);
     gst_buffer_unmap(lBuffer, &lInfo);
 
@@ -164,5 +221,8 @@ void GstreamerVideoWriter::recording()
     if (gst_app_src_push_buffer(mAppSrc, lBuffer) == GST_FLOW_OK)
     {
         ++mNumFrames;
+    }
+    else{
+        gst_buffer_unref(lBuffer);
     }
 }

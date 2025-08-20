@@ -24,17 +24,15 @@ void VideoItem::newImage(const QImage &pImage)
     if (pImage.isNull())
         return;
 
-    QImage prepared = (pImage.format() == QImage::Format_ARGB32_Premultiplied)
-                        ? pImage
-                        : pImage.convertToFormat(QImage::Format_ARGB32_Premultiplied);
-
     {
         QMutexLocker lock(&mMutex);
-        mImagePending = std::move(prepared);
+        mImagePending = pImage;
         mHasNewFrame = true;
     }
 
-    QMetaObject::invokeMethod(this, [this](){ this->update();}, Qt::QueuedConnection);
+    emit onNewFrame(pImage);
+
+    QMetaObject::invokeMethod(this, "update", Qt::QueuedConnection);
 }
 
 QRectF VideoItem::fittedRect(const QSize &imgSize, const QRectF &box) const
