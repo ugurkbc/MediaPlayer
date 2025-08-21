@@ -59,7 +59,7 @@ ApplicationWindow  {
                         Loader {
                             id: topPageLoader
                             anchors.fill: parent
-                            sourceComponent: TopStartUpScreen
+                            sourceComponent: TopStartUpScreen {}
                         }
                     }
 
@@ -88,7 +88,7 @@ ApplicationWindow  {
                         Loader {
                             id: bottomPageLoader
                             anchors.fill: parent
-                            sourceComponent: BottomStartUpScreen
+                            sourceComponent: BottomStartUpScreen {}
                         }
                     }
                 }
