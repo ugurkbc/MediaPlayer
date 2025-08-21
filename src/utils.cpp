@@ -1,6 +1,8 @@
 #include "utils.h"
 #include <QUrl>
 #include <mutex>
+#include <QDir>
+#include <QStandardPaths>
 
 Utils * Utils::getInstance()
 {
@@ -18,6 +20,21 @@ Utils * Utils::getInstance()
 Utils::Utils()
 {
 
+}
+
+QString Utils::generateFileName()
+{
+    QString videosDir = QStandardPaths::writableLocation(QStandardPaths::MoviesLocation);
+    if (videosDir.isEmpty())
+        videosDir = "records";
+
+    QDir dir(videosDir);
+    if (!dir.exists("records"))
+        dir.mkpath("records");
+
+    QString timestamp = QDateTime::currentDateTime().toString("yyyyMMdd_HHmmss");
+
+    return dir.filePath("records/" + timestamp + ".mp4");
 }
 
 QString Utils::fileDialogConverter(const QString &url)

@@ -5,7 +5,6 @@
 #include <QString>
 #include <gst/gst.h>
 #include <gst/app/gstappsink.h>
-#include "streamcontrol/videocontrol/util/util.h"
 
 class GstreamerVideoCapture : public QThread
 {
@@ -36,6 +35,13 @@ private:
     GMainLoop* loop = nullptr;
 
     using CallbackFunc = GstFlowReturn (*)(GstElement*, gpointer);
+
+    enum class VideoSource : unsigned int {
+        FILESOURCE = 0,
+        REALTIME,
+        SIZE
+    };
+
 
     CallbackFunc bufferCallbacks[static_cast<unsigned int>(VideoSource::SIZE)] = {0};
     gint width = 0;

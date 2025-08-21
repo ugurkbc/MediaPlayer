@@ -23,7 +23,6 @@ public slots:
 private:
     void init();
     void clean();
-    QString generateFileName();
     QString createPipeline();
 private slots:
     void recording();
@@ -41,9 +40,7 @@ private:
     float mFrameRate = 30;
     int mNumFrames = 0;
 
-    static const QString PATH;
     static const QString APPSRC_NAME;
-    static const QString MEDIA_TYPE;
 };
 
 #endif // GSTREAMERVIDEOWRITER_H

@@ -1,12 +1,10 @@
 #include "gstreamer/GstreamerVideoWriter.h"
-#include <QStandardPaths>
+#include <utils.h>
 #include <QDateTime>
 #include <QDir>
 #include <QPainter>
 #include <QtMath>
 
-const QString GstreamerVideoWriter::PATH = "./records/";
-const QString GstreamerVideoWriter::MEDIA_TYPE = ".mp4";
 const QString GstreamerVideoWriter::APPSRC_NAME = "mysrc";
 
 static void paintTestPattern(QImage &img, int frameIndex)
@@ -71,21 +69,6 @@ GstreamerVideoWriter::~GstreamerVideoWriter()
     clean();
 }
 
-QString GstreamerVideoWriter::generateFileName()
-{
-    QString videosDir = QStandardPaths::writableLocation(QStandardPaths::MoviesLocation);
-    if (videosDir.isEmpty())
-        videosDir = PATH;
-
-    QDir dir(videosDir);
-    if (!dir.exists("records"))
-        dir.mkpath("records");
-
-    QString timestamp = QDateTime::currentDateTime().toString("yyyyMMdd_HHmmss");
-
-    return dir.filePath("records/" + timestamp + MEDIA_TYPE);
-}
-
 QString GstreamerVideoWriter::createPipeline()
 {
     int fpsNum   = mFrameRate;
@@ -111,7 +94,7 @@ void GstreamerVideoWriter::record(QString pFileName, int pWidth, int pHeight, fl
     mHeight = pHeight > 0 ? pHeight : mHeight;
     mFrameRate = (pFPS > 0) ? pFPS : mFrameRate;
     mNumFrames = 0;
-    mFileName = generateFileName();
+    mFileName = Utils::getInstance()->generateFileName();
     mPipelineString = createPipeline();
 
     int intervalMs = static_cast<int>(1000.0 / mFrameRate);
