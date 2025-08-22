@@ -3,6 +3,7 @@
 #include <ui/videoitem.h>
 #include <utils.h>
 #include <streamcontrol/videocontrol/videocontrol.h>
+#include <model/recordmodel.h>
 
 int main(int argc, char *argv[])
 {
@@ -19,6 +20,7 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<VideoItem>("App", 1, 0, "VideoItem");
     qmlRegisterType<VideoControl>("App", 1, 0, "VideoControl");
+    qmlRegisterType<RecordModel>("App", 1, 0, "RecordModel");
 
     const QUrl url(QStringLiteral("qrc:/qml/Main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app, [url](QObject *obj, const QUrl &objUrl) {
