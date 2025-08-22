@@ -14,6 +14,7 @@ public:
     Utils(const Utils&) = delete;
     Utils& operator=(const Utils&) = delete;
 
+    Q_INVOKABLE QString recordsFolderPath();
     Q_INVOKABLE  QString fileDialogConverter(const QString &url);
     Q_INVOKABLE  QString generateFileName();
 

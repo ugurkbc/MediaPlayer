@@ -18,7 +18,7 @@ public:
     ~GstreamerVideoWriter();
 public slots:
     void pushImage(QImage pImage);
-    void record(QString pFileName, int pWidth, int pHeight, float pFPS);
+    void record(int pWidth, int pHeight, float pFPS);
     void close();
 private:
     void init();

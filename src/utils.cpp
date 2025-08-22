@@ -22,6 +22,18 @@ Utils::Utils()
 
 }
 
+QString Utils::recordsFolderPath() {
+    QString base = QStandardPaths::writableLocation(QStandardPaths::MoviesLocation);
+    if (base.isEmpty())
+        base = ".";
+
+    QDir dir(base);
+    if (!dir.exists("records"))
+        dir.mkpath("records");
+
+    return dir.filePath("records");
+}
+
 QString Utils::generateFileName()
 {
     QString videosDir = QStandardPaths::writableLocation(QStandardPaths::MoviesLocation);

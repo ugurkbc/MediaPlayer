@@ -7,6 +7,7 @@
         <file>qml/screens/mainscreen/MainScreen.qml</file>
         <file>qml/screens/rightscreen/RightStartUpScreen.qml</file>
         <file>qml/screens/topscreen/TopStartUpScreen.qml</file>
+        <file>qml/model/VideoRecordsView.qml</file>
 
 
         <!-- Icons -->

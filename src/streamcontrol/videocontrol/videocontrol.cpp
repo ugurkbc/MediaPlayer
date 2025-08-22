@@ -77,7 +77,6 @@ void VideoControl::closeVideoStream()
 void VideoControl::startRecord()
 {
     QMetaObject::invokeMethod(&mVideoWriter, "record", Qt::QueuedConnection,
-        Q_ARG(QString,  QStringLiteral("video")),
         Q_ARG(int,      640),
         Q_ARG(int,      480),
         Q_ARG(float,    30.0f));

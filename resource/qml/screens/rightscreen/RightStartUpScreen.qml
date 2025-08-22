@@ -12,6 +12,7 @@ Rectangle{
     color: "#1e1e1e"
     
     required property VideoControl videoControl
+    signal openRecordsOverlay()
 
     ColumnLayout{
         anchors.fill: parent
@@ -44,6 +45,7 @@ Rectangle{
             iconSource: "qrc:/icons/video-records.svg"
             buttonText: "Records"
             reverse: true
+            onClicked: openRecordsOverlay()
         }
 
         Item { Layout.fillHeight: true }

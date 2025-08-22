@@ -86,7 +86,7 @@ void GstreamerVideoWriter::pushImage(QImage pImage)
     //paintTestPattern(mImage, mNumFrames);
 }
 
-void GstreamerVideoWriter::record(QString pFileName, int pWidth, int pHeight, float pFPS)
+void GstreamerVideoWriter::record(int pWidth, int pHeight, float pFPS)
 {
     if(mRecordTimer.isActive()) return;
 
