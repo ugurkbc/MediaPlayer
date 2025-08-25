@@ -23,6 +23,7 @@ QVariant RecordModel::data(const QModelIndex& index, int role) const
     case FilePathRole:     return fi.absoluteFilePath();
     case FileSizeRole:     return QVariant::fromValue<qulonglong>(fi.size());
     case FileModifiedRole: return fi.lastModified();
+    case RowIndexRole:     return index.row();
     default:               return {};
     }
 }
@@ -33,7 +34,8 @@ QHash<int, QByteArray> RecordModel::roleNames() const
         { FileNameRole,     "fileName"     },
         { FilePathRole,     "filePath"     },
         { FileSizeRole,     "fileSize"     },
-        { FileModifiedRole, "fileModified" }
+        { FileModifiedRole, "fileModified" },
+        { RowIndexRole,     "rowIndex"     }
     };
 }
 

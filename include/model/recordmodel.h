@@ -15,7 +15,8 @@ public:
         FileNameRole = Qt::UserRole + 1,
         FilePathRole,
         FileSizeRole,
-        FileModifiedRole
+        FileModifiedRole,
+        RowIndexRole
     };
     Q_ENUM(Roles)
 

@@ -2,33 +2,28 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import Utils 1.0
-import App 1.0   // RecordModel
+import App 1.0  
 
-// Root carries the panel visuals (drawn by the Loader area in Main.qml)
 Rectangle {
     id: root
     anchors.fill: parent
 
-    // panel look
     radius: 14
-    color: "#99222222"        // dark gray with alpha (no opacity)
+    color: "#99222222"
     border.width: 1
     border.color: "#66FFFFFF"
 
-    // shared column widths so header & rows line up
     property int colSizeW: 100
     property int colModifiedW: 240
 
     signal accepted(string filePath, string fileName, var fileSize, var fileModified)
     signal closed()
 
-    // Model points to the same folder Utils uses when writing
     RecordModel {
         id: recordModel
-        folder: Utils.recordsFolderPath()   // plain filesystem path
+        folder: Utils.recordsFolderPath()
     }
 
-    // Helpers
     function formatSize(bytes) {
         const units = ["B","KB","MB","GB","TB"]; let i = 0; let n = Number(bytes);
         while (n >= 1024 && i < units.length - 1) { n /= 1024; ++i; }
@@ -41,7 +36,6 @@ Rectangle {
         anchors.margins: 12
         spacing: 10
 
-        // Header
         RowLayout {
             Layout.fillWidth: true
             spacing: 8
@@ -55,25 +49,24 @@ Rectangle {
             }
         }
 
-        // Table header (aligned with row widths)
         RowLayout {
             Layout.fillWidth: true
             Layout.leftMargin: 4
             Layout.rightMargin: 4
             spacing: 16
 
-            Label {                      // Name
+            Label {                     
                 text: "Name"
                 color: "#DDDDDD"
                 Layout.fillWidth: true
             }
-            Label {                      // Size
+            Label {                    
                 text: "Size"
                 color: "#DDDDDD"
                 Layout.preferredWidth: root.colSizeW
                 horizontalAlignment: Text.AlignRight
             }
-            Label {                      // Modified
+            Label {                    
                 text: "Modified"
                 color: "#DDDDDD"
                 Layout.preferredWidth: root.colModifiedW
@@ -81,15 +74,13 @@ Rectangle {
             }
         }
 
-        // List container (Rectangle instead of Frame; works with native style)
         Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
             radius: 8
-            color: "#33222222"   // subtle dark bg
+            color: "#33222222"
             clip: true
 
-            // Empty state
             Label {
                 anchors.centerIn: parent
                 visible: list.count === 0
@@ -108,20 +99,21 @@ Rectangle {
                 keyNavigationWraps: true
                 focus: true
 
-                // selection highlight
                 highlight: Rectangle { color: "#22336699"; radius: 6 }
                 highlightFollowsCurrentItem: true
 
-                // scrollbar
                 ScrollBar.vertical: ScrollBar { }
 
                 delegate: Rectangle {
                     id: row
+
                     required property string fileName
                     required property string filePath
                     required property var    fileSize
                     required property var    fileModified
+                    required property int    rowIndex
 
+                    width: list.width 
                     height: 36
                     color: "transparent"
 
@@ -131,19 +123,19 @@ Rectangle {
                         anchors.rightMargin: 8
                         spacing: 16
 
-                        Label { // Name
+                        Label { 
                             text: row.fileName
                             color: "white"
                             elide: Text.ElideMiddle
                             Layout.fillWidth: true
                         }
-                        Label { // Size
+                        Label { 
                             text: root.formatSize(row.fileSize)
                             color: "#CCCCCC"
                             Layout.preferredWidth: root.colSizeW
                             horizontalAlignment: Text.AlignRight
                         }
-                        Label { // Modified
+                        Label {
                             text: root.formatDate(row.fileModified)
                             color: "#CCCCCC"
                             Layout.preferredWidth: root.colModifiedW
@@ -153,7 +145,7 @@ Rectangle {
 
                     MouseArea {
                         anchors.fill: parent
-                        onClicked:       list.currentIndex = index
+                        onClicked:       list.currentIndex = rowIndex
                         onDoubleClicked: root.accepted(row.filePath, row.fileName, row.fileSize, row.fileModified)
                     }
                 }
@@ -162,7 +154,6 @@ Rectangle {
             }
         }
 
-        // Buttons
         RowLayout {
             Layout.fillWidth: true
             Layout.rightMargin: 4
@@ -182,7 +173,6 @@ Rectangle {
         }
     }
 
-    // Keyboard shortcuts
     Keys.onPressed: (e) => {
         if ((e.key === Qt.Key_Return || e.key === Qt.Key_Enter) && list.currentItem) {
             accepted(list.currentItem.filePath, list.currentItem.fileName, list.currentItem.fileSize, list.currentItem.fileModified)

@@ -147,9 +147,7 @@ ApplicationWindow  {
                 anchors.fill: parent
 
                 onAccepted: (path, name, size, mod) => {
-                    console.log("Chosen:", path)
                     overlayVisible = false
-                    // handle selection here if needed
                 }
                 onClosed: overlayVisible = false
             }
