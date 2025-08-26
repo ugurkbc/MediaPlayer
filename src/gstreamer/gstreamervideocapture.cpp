@@ -245,7 +245,7 @@ GstFlowReturn GstreamerVideoCapture::newBufferCallbackRealTime(GstElement* appsi
                 gst_structure_get_int (lStructure, "width", &capture->width);
                 gst_structure_get_int (lStructure, "height", &capture->height);
 
-                QImage image(map.data, capture->width, capture->height, QImage::Format_RGB888, cleanUpGstBuffer, buffer);
+                QImage image(map.data, capture->width, capture->height, QImage::Format_ARGB32_Premultiplied, cleanUpGstBuffer, buffer);
 
                 emit capture->newImage(image);
 
@@ -279,7 +279,7 @@ void GstreamerVideoCapture::run()
         g_main_loop_run(loop);
     }
 
-    QImage lImage(width, height, QImage::Format_RGB888);
+    QImage lImage(width, height, QImage::Format_ARGB32_Premultiplied);
     lImage.fill(Qt::black);
     emit newImage(lImage);
 
