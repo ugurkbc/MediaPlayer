@@ -51,6 +51,8 @@ private:
 
 signals:
     void newImage(QImage &);
+    void videoPlay();
+    void closeVideoPlay();
 };
 
 #endif // GSTREAMERVIDEOCAPTURE_H

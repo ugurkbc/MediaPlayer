@@ -110,6 +110,8 @@ void GstreamerVideoWriter::record(int pWidth, int pHeight, float pFPS)
 void GstreamerVideoWriter::close()
 {
     clean();
+
+    emit closeRecordVideo();
 }
 
 void GstreamerVideoWriter::init()
@@ -147,6 +149,8 @@ void GstreamerVideoWriter::init()
         clean();
         return;
     }
+
+    emit recordVideo();
 
     mRecordTimer.start();
 }

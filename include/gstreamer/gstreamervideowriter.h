@@ -41,6 +41,9 @@ private:
     int mNumFrames = 0;
 
     static const QString APPSRC_NAME;
+signals:
+    void recordVideo();
+    void closeRecordVideo();
 };
 
 #endif // GSTREAMERVIDEOWRITER_H

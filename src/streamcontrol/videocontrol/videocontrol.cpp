@@ -8,6 +8,10 @@
 VideoControl::VideoControl(QObject *parent)
     : QObject{parent}
 {
+    connect(&mVideoCapture, &GstreamerVideoCapture::videoPlay, this, &VideoControl::onVideoPlay, Qt::QueuedConnection);
+    connect(&mVideoCapture, &GstreamerVideoCapture::closeVideoPlay, this, &VideoControl::onCloseVideoPlay, Qt::QueuedConnection);
+    connect(&mVideoWriter, &GstreamerVideoWriter::recordVideo, this, &VideoControl::onRecord, Qt::QueuedConnection);
+    connect(&mVideoWriter, &GstreamerVideoWriter::closeRecordVideo, this, &VideoControl::onCloseRecord, Qt::QueuedConnection);
 }
 
 QObject* VideoControl::videoItemQObject() const 
@@ -40,6 +44,22 @@ void VideoControl::setVideoItem(VideoItem *pVideoItem)
     connect(&mVideoCapture, &GstreamerVideoCapture::newImage, mVideoItem.data(), &VideoItem::newImage, Qt::DirectConnection);
 
     connect(mVideoItem.data(), &VideoItem::onNewFrame, &mVideoWriter, &GstreamerVideoWriter::pushImage, Qt::QueuedConnection);
+}
+
+void VideoControl::onRecord(){
+    emit recordFeedBack();    
+}
+
+void VideoControl::onCloseRecord(){
+    emit closeRecordFeedBack();     
+}
+
+void VideoControl::onVideoPlay(){
+    emit videoPlayFeedBack();     
+}
+
+void VideoControl::onCloseVideoPlay(){
+    emit closeVideoPlayFeedBack();     
 }
 
 void VideoControl::setUrl(QString url)

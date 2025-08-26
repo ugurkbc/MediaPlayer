@@ -27,9 +27,18 @@ public:
 
     QObject* videoItemQObject() const;
     void setVideoItemQObject(QObject* obj);
+private:
+    Q_INVOKABLE void onRecord();
+    Q_INVOKABLE void onCloseRecord();
+    Q_INVOKABLE void onVideoPlay();
+    Q_INVOKABLE void onCloseVideoPlay();
 
 signals:
     void videoItemChanged(QObject* item);
+    void recordFeedBack();
+    void closeRecordFeedBack();
+    void videoPlayFeedBack();
+    void closeVideoPlayFeedBack();
 
 private:
     GstreamerVideoCapture mVideoCapture;

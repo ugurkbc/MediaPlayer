@@ -275,6 +275,8 @@ void GstreamerVideoCapture::run()
     GstStateChangeReturn ret = gst_element_set_state(pipeline, GST_STATE_PLAYING);
     loop = g_main_loop_new(nullptr, FALSE);
 
+    emit videoPlay();
+
     if(ret != GST_STATE_CHANGE_FAILURE){
         g_main_loop_run(loop);
     }
@@ -282,6 +284,8 @@ void GstreamerVideoCapture::run()
     QImage lImage(width, height, QImage::Format_ARGB32_Premultiplied);
     lImage.fill(Qt::black);
     emit newImage(lImage);
+
+    emit closeVideoPlay();
 
     clean();
 }

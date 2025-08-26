@@ -28,11 +28,11 @@ Rectangle{
         Item { Layout.fillHeight: true }
 
         CustomButton{
+            id: playBtn
             Layout.alignment: Qt.AlignHCenter
             iconSource: "qrc:/icons/play-button.svg"
             buttonText: "Play Video"
             onClicked: videoControl.playVideoStream()
-            
         }
 
         Item { Layout.fillHeight: true }
@@ -55,16 +55,20 @@ Rectangle{
 
         Item { Layout.fillHeight: true }
 
+        Connections {
+            target: videoControl
+            function onVideoPlayFeedBack()      { playBtn.active = true }
+            function onCloseVideoPlayFeedBack() { playBtn.active = false }
+        }
+
         FileDialog {
-                id: fileDialog
-                title: "Select a .mp4 File"
-                nameFilters: ["MP4 Files (*.mp4)"]
-                onAccepted: {
-                    var filePath = Utils.fileDialogConverter(selectedFile.toString());
-                    videoControl.setUrl(filePath);
-                }
+            id: fileDialog
+            title: "Select a .mp4 File"
+            nameFilters: ["MP4 Files (*.mp4)"]
+            onAccepted: {
+                var filePath = Utils.fileDialogConverter(selectedFile.toString());
+                videoControl.setUrl(filePath);
             }
-    }   
+        }
+    }
 }
-
-

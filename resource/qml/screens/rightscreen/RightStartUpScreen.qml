@@ -2,7 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts
 import QtQuick.Dialogs
-import QtQuick.Window 2.15 
+import QtQuick.Window 2.15
 import Utils 1.0
 import App 1.0
 import "../../customqmlcomponents"
@@ -10,7 +10,7 @@ import "../../customqmlcomponents"
 Rectangle{
     anchors.fill: parent
     color: "#1e1e1e"
-    
+
     required property VideoControl videoControl
     signal openRecordsOverlay()
 
@@ -21,6 +21,7 @@ Rectangle{
         Item { Layout.fillHeight: true }
 
         CustomButton{
+            id: recordBtn
             Layout.alignment: Qt.AlignHCenter
             iconSource: "qrc:/icons/video-record-play.svg"
             buttonText: "Record"
@@ -59,7 +60,11 @@ Rectangle{
         }
 
         Item { Layout.fillHeight: true }
+
+        Connections {
+            target: videoControl
+            function onRecordFeedBack()        { recordBtn.active = true }
+            function onCloseRecordFeedBack()   { recordBtn.active = false }
+        }
     }
 }
-
-
