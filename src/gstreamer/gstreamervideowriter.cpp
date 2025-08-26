@@ -100,7 +100,7 @@ void GstreamerVideoWriter::record(int pWidth, int pHeight, float pFPS)
     int intervalMs = static_cast<int>(1000.0 / mFrameRate);
     mRecordTimer.setInterval(intervalMs);
 
-    mImage = QImage(mWidth, mHeight, QImage::QImage::Format_RGB888);
+    mImage = QImage(mWidth, mHeight, QImage::QImage::Format_ARGB32_Premultiplied);
     mImage.fill(Qt::black);
     //paintTestPattern(mImage, 0);
 

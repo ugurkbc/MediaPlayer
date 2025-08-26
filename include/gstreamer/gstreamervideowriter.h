@@ -30,7 +30,7 @@ private:
     QImage mImage;
     QString mPipelineString = "";
     QString mFileName = "";
-    QString mFormat = "RGB";
+    QString mFormat = "BGRA";
     QTimer mRecordTimer;
     GstElement *mPipeline = nullptr;
     GstAppSrc  *mAppSrc = nullptr;

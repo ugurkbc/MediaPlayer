@@ -212,7 +212,7 @@ GstFlowReturn GstreamerVideoCapture::newBufferCallbackFileSource(GstElement* app
             GstMapInfo map;
             if (gst_buffer_map(buffer, &map, GST_MAP_READ)) {
 
-                QImage image(map.data, capture->width, capture->height, QImage::Format_RGB888, cleanUpGstBuffer, buffer);
+                QImage image(map.data, capture->width, capture->height, QImage::Format_ARGB32_Premultiplied, cleanUpGstBuffer, buffer);
 
                 emit capture->newImage(image);
 

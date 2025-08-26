@@ -55,7 +55,7 @@ void VideoControl::playVideoStream()
     } else {
         if (QFile::exists(mURL)) {
             const QString pipeline =
-                QStringLiteral("filesrc location=%1 ! qtdemux ! h264parse ! avdec_h264 ! videoconvert ! video/x-raw,format=RGB ! appsink name=sink")
+                QStringLiteral("filesrc location=%1 ! qtdemux ! h264parse ! avdec_h264 ! videoconvert ! video/x-raw,format=BGRA ! appsink name=sink")
                 .arg(mURL);
             mVideoCapture.play(pipeline);
         } else {
